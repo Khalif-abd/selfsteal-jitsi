@@ -64,6 +64,8 @@ The installed executable is `/usr/local/bin/selfsteal-jitsi`.
 
 - Keeps public TCP/443 owned by Xray Reality.
 - Runs Jitsi web only on `127.0.0.1:8000` by default.
+- Forces Jitsi to IPv4-only mode (`ENABLE_IPV6=0`), so it also works on hosts with IPv6 disabled.
+- Creates Prosody persistent storage with uid/gid `1000:1000` to prevent `/var/lib/prosody` startup failures.
 - Publishes Jitsi Videobridge UDP/10000 by default.
 - Rewrites the nginx selfsteal virtual host to proxy the fallback to local Jitsi.
 - Backs up the existing `selfsteal.conf` before rewriting it.

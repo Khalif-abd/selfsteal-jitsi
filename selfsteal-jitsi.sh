@@ -10,7 +10,7 @@ set -Eeuo pipefail
 #
 # Jitsi web itself is NOT published on 443/8443.
 
-VERSION="3.0.0"
+VERSION="3.0.1"
 REPO="${SELFSTEAL_JITSI_REPO:-khalif-abd/selfsteal-jitsi}"
 BRANCH="${SELFSTEAL_JITSI_BRANCH:-main}"
 RAW_URL="https://raw.githubusercontent.com/${REPO}/${BRANCH}/selfsteal-jitsi.sh"
@@ -225,6 +225,9 @@ prepare_env() {
   set_env DISABLE_HTTPS "1"
   set_env ENABLE_HTTP_REDIRECT "0"
   set_env ENABLE_LETSENCRYPT "0"
+  # This integration is intentionally IPv4-only. Prevent Jitsi nginx/Prosody
+  # from trying to bind IPv6 sockets on hosts where IPv6 is disabled.
+  set_env ENABLE_IPV6 "0"
   set_env JVB_ADVERTISE_IPS "$PUBLIC_IP"
   set_env JVB_PORT "$JVB_PORT"
   set_env JITSI_IMAGE_VERSION "stable"
@@ -245,7 +248,12 @@ prepare_env() {
     "$JITSI_CFG/prosody/config" \
     "$JITSI_CFG/prosody/prosody-plugins-custom" \
     "$JITSI_CFG/jicofo" \
-    "$JITSI_CFG/jvb"
+    "$JITSI_CFG/jvb" \
+    "$JITSI_CFG/storage/prosody"
+
+  # /var/lib/prosody is a host bind mount. Current Prosody images run as
+  # uid/gid 1000 and fail fast when this storage is root-owned and not writable.
+  chown -R 1000:1000 "$JITSI_CFG/storage/prosody"
 }
 
 write_override() {
