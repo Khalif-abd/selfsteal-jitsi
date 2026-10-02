@@ -10,7 +10,7 @@ Jitsi Meet behind an existing Remnawave/Xray Reality + `nginx-selfsteal` install
 sudo bash <(curl -Ls https://github.com/khalif-abd/selfsteal-jitsi/raw/main/selfsteal-jitsi.sh) \
   install \
   --domain meet.example.com \
-  --ip 203.0.113.10 \
+  --ip 203.0.213.10 \
   --clean
 ```
 
@@ -18,21 +18,21 @@ With internal authentication:
 
 ```bash
 sudo bash <(curl -Ls https://github.com/khalif-abd/selfsteal-jitsi/raw/main/selfsteal-jitsi.sh) \
-  install --domain meet.example.com --ip 203.0.113.10 --auth --clean
+  install --domain meet.example.com --ip 203.0.213.10 --auth --clean
 ```
 
 Without authentication:
 
 ```bash
 sudo bash <(curl -Ls https://github.com/khalif-abd/selfsteal-jitsi/raw/main/selfsteal-jitsi.sh) \
-  install --domain meet.example.com --ip 203.0.113.10 --no-auth --clean
+  install --domain meet.example.com --ip 203.0.213.10 --no-auth --clean
 ```
 
 Optional ports:
 
 ```bash
 sudo bash <(curl -Ls https://github.com/khalif-abd/selfsteal-jitsi/raw/main/selfsteal-jitsi.sh) \
-  install --domain meet.example.com --ip 203.0.113.10 \
+  install --domain meet.example.com --ip 203.0.213.10 \
   --http-port 8000 --jvb-port 10000 --clean
 ```
 
@@ -47,7 +47,7 @@ sudo bash <(curl -Ls https://github.com/khalif-abd/selfsteal-jitsi/raw/main/self
 Then:
 
 ```bash
-sudo selfsteal-jitsi install --domain meet.example.com --ip 203.0.113.10 --clean
+sudo selfsteal-jitsi install --domain meet.example.com --ip 203.0.213.10 --clean
 sudo selfsteal-jitsi status
 sudo selfsteal-jitsi repair
 sudo selfsteal-jitsi logs
@@ -86,3 +86,7 @@ The installed executable is `/usr/local/bin/selfsteal-jitsi`.
 `uninstall` removes the Jitsi stack/config but intentionally does not remove Remnawave, Xray or nginx-selfsteal. It also does not automatically restore the old nginx config; use the timestamped `.bak` created during installation if restoration is required.
 
 `update` updates Jitsi images. `update-script` replaces `/usr/local/bin/selfsteal-jitsi` with the current script from this repository.
+
+### IPv4-only mode
+
+`selfsteal-jitsi` intentionally operates in IPv4-only mode. It sets `ENABLE_IPV6=0` for Jitsi and the generated nginx-selfsteal HTTP server listens only on IPv4 (`listen 80;`). This allows installation on hosts where IPv6 is disabled at kernel/sysctl level.

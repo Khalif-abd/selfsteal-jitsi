@@ -10,7 +10,7 @@ set -Eeuo pipefail
 #
 # Jitsi web itself is NOT published on 443/8443.
 
-VERSION="3.0.1"
+VERSION="3.0.2"
 REPO="${SELFSTEAL_JITSI_REPO:-khalif-abd/selfsteal-jitsi}"
 BRANCH="${SELFSTEAL_JITSI_BRANCH:-main}"
 RAW_URL="https://raw.githubusercontent.com/${REPO}/${BRANCH}/selfsteal-jitsi.sh"
@@ -312,7 +312,6 @@ write_nginx() {
   cat > "$SELFSTEAL_CONF" <<EOF
 server {
     listen 80;
-    listen [::]:80;
     server_name ${DOMAIN};
 
     location ^~ /.well-known/acme-challenge/ {
